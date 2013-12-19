@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QUnit Test Suite</title>
+    <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="qunit/qunit.js"></script>
+    <script type="text/javascript" src="qunit/junitlogger.js"></script>
+  </head>
+  <body>
+    <h1 id="qunit-header">QUnit Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <script type="text/javascript" src="../dist/pouchdb-nightly.js"></script>
+    <script type="text/javascript" src="./test.utils.js"></script>
+    <script>
+
+      QUnit.config.testTimeout = 60000;
+
+      QUnit.done = function(report) {
+        if (!window.parent) return;
+        var evt = window.document.createEvent('CustomEvent');
+        evt.initCustomEvent('tests', true, true, JSON.stringify(report));
+        window.parent.document.dispatchEvent(evt);
+      };
+
+      // Append the test file
+      var script = document.createElement('script');
+      var args = testUtils.URLToJSON(document.location.search);
+      script.src = './' + args.file;
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
+
