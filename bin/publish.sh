@@ -11,14 +11,17 @@ fi
 rm -r node_modules
 npm install
 
+# Update version
+./node_modules/tin/bin/tin -v $VERSION
+echo "version: $VERSION" >> docs/_config.yml
+git add package.json bower.json component.json
+git commit -m "bump version to $VERSION"
+git push git@github.com:daleharvey/pouchdb.git master
+
 # Build
 git checkout -b build
-./node_modules/tin/bin/tin -v $VERSION
-echo "module.exports = '"$VERSION"';" > lib/version.js
-echo "version: $VERSION" >> docs/_config.yml
 npm run build
 git add dist -f
-git add lib/version.js package.json bower.json component.json
 git commit -m "build $VERSION"
 
 # Tag and push
